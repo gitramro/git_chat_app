@@ -10,4 +10,18 @@
 
 	socket.on('newMessage',function(message){
 		console.log('newMessage',message);
+		var li = jQuery('<li></li>');
+		li.text(`${message.from}: ${message.text}`);
+
+		jQuery('#messages').append(li);
+	});
+
+	jQuery('#message-form').on('submit',function(e){
+		e.preventDefault(); //prevents default behavior of the event (this case is page refresh on submit)
+		socket.emit('createMessage',{
+			from:'User',
+			text: jQuery('[name=message]').val()
+		},function(){
+
+		});
 	});
