@@ -42,14 +42,14 @@ io.on('connection',(socket)=>{ //event listener
 				}
 			})
 		}
-		
+
 
 		socket.join(params.room);
 		usuarios.removeUser(socket.id); //remove user from any previous room
 		usuarios.addUser(socket.id,params.name,params.room);
 		io.to(params.room).emit('updateUserList',usuarios.getUserList(params.room),usuarios.getUserList(params.room).length,params.room); //third argument for counter of people
-		socket.emit('newMessage',generateMessage('Admin','Planchin welcomes you to the room'));
-		socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`Planchin says  ${params.name} has joined`));
+		socket.emit('newMessage',generateMessage('Admin',' Welcome to the room'));
+		socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined`));
 		callback();
 	});
 
@@ -59,7 +59,7 @@ io.on('connection',(socket)=>{ //event listener
 		if(user && isRealString(message.text)){
 			io.to(user.room).emit('newMessage',generateMessage(user.name,message.text));
 		}
-		
+
 		callback();
 	});
 
@@ -68,7 +68,7 @@ io.on('connection',(socket)=>{ //event listener
 		if(user){
 				io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.latitude,coords.longitude));
 		}
-	
+
 	});
 
 	socket.on('disconnect',()=>{
@@ -79,7 +79,7 @@ io.on('connection',(socket)=>{ //event listener
 			console.log(`${user.name} disconnected.`);
 		}
 	});
-}); 
+});
 
 server.listen(port,()=>{
 	console.log(`Server is up on ${port}`);
@@ -89,5 +89,5 @@ server.listen(port,()=>{
 // old (before rooms)
 
 //io.emit   				--> emits to every single connected user
-//socket.broadcast.emit 	--> sends message to everyone connected to the socket server except for the current user 
-//socket.emit				--> emits an event specifically to one user 
+//socket.broadcast.emit 	--> sends message to everyone connected to the socket server except for the current user
+//socket.emit				--> emits an event specifically to one user
